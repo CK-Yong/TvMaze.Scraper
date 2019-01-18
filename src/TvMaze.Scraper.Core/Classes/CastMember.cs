@@ -6,7 +6,7 @@ namespace TvMaze.Scraper.Core
 	{
 		public virtual TvShow TvShow { get; set; }
 		public virtual int Id { get; set; }
-		public virtual DateTime Birthday { get; set; }
+		public virtual DateTime? Birthday { get; set; }
 		public virtual string Name { get; set; }
 	}
 }

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="MaxKagamine.Moq.HttpClient" Version="1.1.0" />
+    <PackageReference Include="moq" Version="4.10.1" />
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TvMaze.Scraper.Core\TvMaze.Scraper.Core.csproj" />
+    <ProjectReference Include="..\..\src\TvMaze.Scraper.Sources\TvMaze.Scraper.Sources.csproj" />
+    <ProjectReference Include="..\TVMaze.Scraper.TestUtilities\TvMaze.Scraper.TestUtilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Autofac.Extras.Moq">
+      <HintPath>C:\Users\CKTox\.nuget\packages\autofac.extras.moq\4.3.0\lib\netstandard2.0\Autofac.Extras.Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>C:\Users\CKTox\.nuget\packages\fluentassertions\5.6.0\lib\netcoreapp2.0\FluentAssertions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

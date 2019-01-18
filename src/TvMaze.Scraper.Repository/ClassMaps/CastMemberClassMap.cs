@@ -9,7 +9,7 @@ namespace TvMaze.Scraper.Repository.ClassMaps
 		{
 			Id(x => x.Id).GeneratedBy.Identity();
 			Map(x => x.Name);
-			Map(x => x.Birthday);
+			Map(x => x.Birthday).Nullable();
 			References(x => x.TvShow);
 		}
 	}
