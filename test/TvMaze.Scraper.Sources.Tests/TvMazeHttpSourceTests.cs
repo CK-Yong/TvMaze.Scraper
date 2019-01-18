@@ -10,6 +10,7 @@ using MaxKagamine.Moq.HttpClient;
 using Moq;
 using NUnit.Framework;
 using TvMaze.Scraper.Core;
+using TvMaze.Scraper.Sources.Extensions;
 using TvMaze.Scraper.TestUtilities;
 
 namespace TvMaze.Scraper.Sources.Tests
@@ -63,6 +64,52 @@ namespace TvMaze.Scraper.Sources.Tests
 			{
 				_result.Data.Id.Should().Be(1, "Because the test content is of ID 1.");
 				_result.Data.Cast.Count().Should().Be(15, "Because there are 15 cast members in the show.");
+			}
+
+			[Test]
+			public void It_should_return_a_valid_result()
+			{
+				_result.IsSuccessful.Should().BeTrue();
+			}
+		}
+
+		public class When_the_request_fails : TvMazeHttpSourceTests
+		{
+			private int _id = 123;
+
+			protected override void EstablishContext()
+			{
+				base.EstablishContext();
+				_handler.SetupRequest(HttpMethod.Get, new Uri(_baseUri, $"shows/{_id}"))
+					.ReturnsResponse(HttpStatusCode.NotFound, new StringContent(string.Empty))
+					.Verifiable();
+
+				_handler.SetupRequest(HttpMethod.Get, new Uri(_baseUri, $"shows/{_id}/cast"))
+					.ReturnsResponse(HttpStatusCode.NotFound, new StringContent(string.Empty))
+					.Verifiable();
+			}
+
+			protected override async Task BecauseAsync()
+			{
+				_result = await _source.GetByIdAsync(_id, CancellationToken.None);
+			}
+
+			[Test]
+			public void It_should_return_an_unsuccessful_result()
+			{
+				_result.IsSuccessful.Should().BeFalse();
+			}
+
+			[Test]
+			public void It_should_contain_a_relevant_error_message()
+			{
+				_result.ErrorMessage.Should().Contain("the remote API returned 404 - NotFound");
+			}
+
+			[Test]
+			public void It_should_indicate_a_not_found_result()
+			{
+				_result.IndicatesNotFound().Should().BeTrue("because the statuscode was notfound.");
 			}
 		}
 	}

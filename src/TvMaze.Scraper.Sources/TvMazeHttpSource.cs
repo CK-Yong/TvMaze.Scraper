@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -63,10 +64,15 @@ namespace TvMaze.Scraper.Sources
 
 			var tvShowResponse = await getTvShow;
 
+			if (tvShowResponse.StatusCode == HttpStatusCode.NotFound)
+			{
+				return HttpScrapeResult<TvShow>.CreateError(tvShowResponse.StatusCode, $"Could not get the show with ID {id}, the remote API returned {((int)tvShowResponse.StatusCode)} - {tvShowResponse.StatusCode}");
+			}
+
 			if (!tvShowResponse.IsSuccessStatusCode)
 			{
 				return ScrapeResult<TvShow>
-					.CreateError($"Could not get the show with ID {id}, the remote API returned {tvShowResponse.StatusCode} - {tvShowResponse.StatusCode.ToString()}");
+					.CreateError($"Could not get the show with ID {id}, the remote API returned {((int)tvShowResponse.StatusCode)} - {tvShowResponse.StatusCode}");
 			}
 
 			var tvShow = await DeserializeAsync<TvShow>(tvShowResponse.Content);
@@ -77,10 +83,15 @@ namespace TvMaze.Scraper.Sources
 		{
 			var castResponse = await _httpClient.GetAsync($"shows/{id}/cast", cancellationToken);
 
+			if (castResponse.StatusCode == HttpStatusCode.NotFound)
+			{
+				return HttpScrapeResult<IEnumerable<Models.CastMember>>.CreateError(castResponse.StatusCode, $"Could not get the cast for the show with ID {id}, the remote API returned {((int)castResponse.StatusCode)} - {castResponse.StatusCode}");
+			}
+
 			if (!castResponse.IsSuccessStatusCode)
 			{
 				return ScrapeResult<IEnumerable<Models.CastMember>>
-					.CreateError($"Could not get the cast for the show with ID {id}, the remote API returned {castResponse.StatusCode} - {castResponse.StatusCode.ToString()}");
+					.CreateError($"Could not get the cast for the show with ID {id}, the remote API returned  {((int)castResponse.StatusCode)} - {castResponse.StatusCode}");
 			}
 
 			var cast = await DeserializeAsync<IEnumerable<Models.CastMember>>(castResponse.Content);

@@ -3,14 +3,52 @@ using System.Collections.Generic;
 
 namespace TvMaze.Scraper.Core
 {
-	public class ScrapeResult<TData>
+	/// <summary>
+	/// Marker class for scrape results.
+	/// </summary>
+	public abstract class ScrapeResult
+	{
+		/// <summary>
+		/// Indicates whether the result was successful.
+		/// </summary>
+		public bool IsSuccessful;
+
+		/// <summary>
+		/// Used to communicate an error message.
+		/// </summary>
+		public string ErrorMessage;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScrapeResult"/> class.
+		/// </summary>
+		protected ScrapeResult()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScrapeResult{TData}"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
+		protected ScrapeResult(string errorMessage)
+		{
+			ErrorMessage = errorMessage;
+			IsSuccessful = false;
+		}
+	}
+
+	/// <summary>
+	/// Result that contains the retrieved data.
+	/// </summary>
+	/// <typeparam name="TData">The type of the data.</typeparam>
+	public class ScrapeResult<TData> : ScrapeResult
 	{
 		private readonly TData _data;
 
-		public readonly string ErrorMessage;
-
-		public readonly bool IsSuccessful;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScrapeResult{TData}"/> class.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		/// <exception cref="ArgumentNullException">data - Cannot create a successful scrape result with null data.</exception>
 		public ScrapeResult(TData data)
 		{
 			if (EqualityComparer<TData>.Default.Equals(data, default(TData)))
@@ -22,12 +60,22 @@ namespace TvMaze.Scraper.Core
 			_data = data;
 		}
 
-		private ScrapeResult(string errorMessage)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScrapeResult{TData}"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
+		public ScrapeResult(string errorMessage)
+			: base(errorMessage)
 		{
-			ErrorMessage = errorMessage;
-			IsSuccessful = false;
 		}
 
+		/// <summary>
+		/// Gets the data associated with this <see cref="ScrapeResult{TData}"/>.
+		/// </summary>
+		/// <value>
+		/// The data.
+		/// </value>
+		/// <exception cref="ScrapeDataNotAccessibleException">If the result was unsuccessful.</exception>
 		public TData Data
 		{
 			get
