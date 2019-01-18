@@ -13,7 +13,6 @@ using TvMaze.Scraper.TestUtilities;
 namespace TvMaze.Scraper.Repository.Tests
 {
 	[TestFixture]
-	[SingleThreaded]
 	internal class TvShowRepositoryIntegrationTests : AsyncSpecification
 	{
 		private AutoMock _mock;
@@ -26,7 +25,6 @@ namespace TvMaze.Scraper.Repository.Tests
 		{
 			_mock = AutoMock.GetLoose();
 			_sessionFactory = _mock.UseInMemoryDatabase(GetType().FullName, configuration => configuration.FluentMappings.AddFromAssemblyOf<TvShowClassMap>());
-			_session = _sessionFactory.OpenSession();
 			_repository = _mock.Create<NHibernateTVShowRepository>();
 			_fixture = new Fixture();
 			_fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
@@ -35,7 +33,6 @@ namespace TvMaze.Scraper.Repository.Tests
 
 		protected override void CleanUpContext()
 		{
-			_session.Dispose();
 			_sessionFactory.Dispose();
 		}
 
@@ -49,12 +46,14 @@ namespace TvMaze.Scraper.Repository.Tests
 				base.EstablishContext();
 				_input = _fixture
 					.Build<TvShow>()
-					.With(x => x.Id, default(int))
+					.With(x => x.Id, _id)
 					.Create();
 
+				var i = 1; 
 				foreach (var cast in _input.Cast)
 				{
-					cast.Id = default(int);
+					cast.Id = i;
+					i++;
 				}
 			}
 
@@ -77,7 +76,7 @@ namespace TvMaze.Scraper.Repository.Tests
 		public class When_getting_the_tv_show : TvShowRepositoryIntegrationTests
 		{
 			private TvShow _expected;
-			private int _id = 1;
+			private int _id = 2;
 			private TvShow _result;
 
 			protected override void EstablishContext()
@@ -85,16 +84,18 @@ namespace TvMaze.Scraper.Repository.Tests
 				base.EstablishContext();
 				_expected = _fixture
 					.Build<TvShow>()
-					.With(x => x.Id, default(int))
+					.With(x => x.Id, _id)
 					.Create();
 
+				int i = 4; // Set to 4 so that these do not interfere with other tests.
 				foreach (var cast in _expected.Cast)
 				{
-					cast.Id = default(int);
+					cast.Id = i;
+					i++;
 				}
 
-				using(var session = _sessionFactory.OpenSession())
-				using(var transaction = session.BeginTransaction())
+				using (var session = _sessionFactory.OpenSession())
+				using (var transaction = session.BeginTransaction())
 				{
 					session.SaveOrUpdate(_expected);
 					transaction.Commit();
@@ -109,7 +110,6 @@ namespace TvMaze.Scraper.Repository.Tests
 			[Test, Order(2)]
 			public void It_should_get_the_show_by_id()
 			{
-				_session.Lock(_result, LockMode.None); // Attach session to object.
 				_result.Should().BeEquivalentTo(_expected);
 			}
 		}

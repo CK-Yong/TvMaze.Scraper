@@ -36,8 +36,6 @@ namespace TvMaze.Scraper.Tests
 
 			public class When_successful : When_scraping
 			{
-				private ScrapeResult<TvShow> _result;
-
 				protected override void EstablishContext()
 				{
 					base.EstablishContext();
@@ -95,6 +93,12 @@ namespace TvMaze.Scraper.Tests
 				public void It_should_return_the_result()
 				{
 					_result.Should().Be(_scrapeResult);
+				}
+
+				[Test]
+				public void The_result_should_indicate_non_success()
+				{
+					_result.IsSuccessful.Should().BeFalse();
 				}
 			}
 		}

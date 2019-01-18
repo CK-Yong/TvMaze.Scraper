@@ -20,7 +20,7 @@ namespace TvMaze.Scraper.Repository
 			using (var session = _sessionFactory.OpenSession())
 			using (var transaction = session.BeginTransaction())
 			{
-				await session.SaveAsync(entity, cancellationToken);
+				await session.SaveOrUpdateAsync(entity, cancellationToken);
 				await transaction.CommitAsync(cancellationToken);
 			}
 		}
@@ -31,7 +31,7 @@ namespace TvMaze.Scraper.Repository
 			{
 				var fromDb = await session.QueryOver<TvShow>()
 					.Where(show => show.Id == id)
-					.Fetch(show => show.Cast).Default
+					.Fetch(show => show.Cast).Eager
 					.SingleOrDefaultAsync(cancellationToken);
 				return fromDb;
 			}

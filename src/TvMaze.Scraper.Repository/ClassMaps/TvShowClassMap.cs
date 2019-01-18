@@ -7,7 +7,7 @@ namespace TvMaze.Scraper.Repository.ClassMaps
 	{
 		public TvShowClassMap()
 		{
-			Id(x => x.Id).GeneratedBy.Identity();
+			Id(x => x.Id).GeneratedBy.Assigned();
 			Map(x => x.Name);
 			HasMany(x => x.Cast)
 				.KeyColumn("TvShowId")

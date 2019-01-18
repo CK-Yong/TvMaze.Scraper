@@ -64,7 +64,7 @@ namespace TvMaze.Scraper.Core
 		/// Initializes a new instance of the <see cref="ScrapeResult{TData}"/> class.
 		/// </summary>
 		/// <param name="errorMessage">The error message.</param>
-		public ScrapeResult(string errorMessage)
+		protected ScrapeResult(string errorMessage)
 			: base(errorMessage)
 		{
 		}
