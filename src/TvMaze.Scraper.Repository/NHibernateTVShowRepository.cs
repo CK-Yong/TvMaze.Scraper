@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NHibernate;
 using TvMaze.Scraper.Core;
-using TvMaze.Scraper.Core.Classes;
 
 namespace TvMaze.Scraper.Repository
 {

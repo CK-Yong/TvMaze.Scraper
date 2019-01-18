@@ -1,4 +1,4 @@
-﻿namespace TVMaze.Scraper.TestUtilities
+﻿namespace TvMaze.Scraper.TestUtilities
 {
     public abstract class TestDataBuilder<T>
     {

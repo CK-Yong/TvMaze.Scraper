@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using TvMaze.Scraper.Core;
-using TvMaze.Scraper.Core.Classes;
 
 namespace TvMaze.Scraper
 {
@@ -17,12 +16,17 @@ namespace TvMaze.Scraper
 		}
 
 		/// <summary>
-		/// Retrieves a single show by its id from the <see cref="TvMaze.Scraper.Core.ISource{T}"/> and persists it in the <see cref="TvMaze.Scraper.Core.IRepository{T}"/>
+		/// Retrieves a single show by its id from the <see cref="TvMaze.Scraper.Core.ISource{T}"/> and persists it in the <see cref="TvMaze.Scraper.Core.IRepository{T}"/>. If the scrape fails, returns a faulty result.
 		/// </summary>
-		public async Task ScrapeAsync(int id, CancellationToken cancellationToken)
+		public async Task<ScrapeResult<TvShow>> ScrapeAsync(int id, CancellationToken cancellationToken)
 		{
 			var scraped = await _showSource.GetByIdAsync(id, cancellationToken);
-			await _showRepository.SaveAsync(scraped, cancellationToken);
+			if (scraped.IsSuccessful)
+			{
+				await _showRepository.SaveAsync(scraped.Data, cancellationToken);
+			}
+
+			return scraped;
 		}
 	}
 }

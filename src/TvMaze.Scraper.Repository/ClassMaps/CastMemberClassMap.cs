@@ -1,5 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
-using TvMaze.Scraper.Core.Classes;
+using TvMaze.Scraper.Core;
 
 namespace TvMaze.Scraper.Repository.ClassMaps
 {

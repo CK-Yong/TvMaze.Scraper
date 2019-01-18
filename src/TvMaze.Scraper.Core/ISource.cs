@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +15,6 @@ namespace TvMaze.Scraper.Core
 		/// </summary>
 		/// <param name="id">The identifier.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
-		Task<T> GetByIdAsync(int id, CancellationToken cancellationToken);
+		Task<ScrapeResult<T>> GetByIdAsync(int id, CancellationToken cancellationToken);
 	}
 }

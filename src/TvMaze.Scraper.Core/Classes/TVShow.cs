@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TvMaze.Scraper.Core.Classes
+namespace TvMaze.Scraper.Core
 {
 	public class TvShow 
 	{

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TVMaze.Scraper.TestUtilities
+namespace TvMaze.Scraper.TestUtilities
 {
     /// <summary>
     /// Provides a pump that supports running asynchronous methods on the current thread.

@@ -5,10 +5,10 @@ using AutoFixture;
 using FluentAssertions;
 using NHibernate;
 using NUnit.Framework;
-using TvMaze.Scraper.Core.Classes;
+using TvMaze.Scraper.Core;
 using TvMaze.Scraper.Repository.ClassMaps;
 using TvMaze.Scraper.Repository.Tests.NHibernate;
-using TVMaze.Scraper.TestUtilities;
+using TvMaze.Scraper.TestUtilities;
 
 namespace TvMaze.Scraper.Repository.Tests
 {
