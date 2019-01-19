@@ -7,10 +7,10 @@ namespace TvMaze.Scraper.Repository.ClassMaps
 	{
 		public CastMemberClassMap()
 		{
+			Table("CastMembers");
 			Id(x => x.Id).GeneratedBy.Assigned();
-			Map(x => x.Name);
+			Map(x => x.Name).Not.Nullable();
 			Map(x => x.Birthday).Nullable();
-			References(x => x.TvShow);
 		}
 	}
 }

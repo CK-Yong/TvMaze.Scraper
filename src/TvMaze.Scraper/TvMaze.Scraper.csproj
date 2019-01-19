@@ -8,4 +8,10 @@
     <ProjectReference Include="..\TvMaze.Scraper.Core\TvMaze.Scraper.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>C:\Users\CKTox\.nuget\packages\autofac\4.2.0\lib\netstandard1.1\Autofac.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,13 @@
+﻿create table TvShows (
+	Id int PRIMARY KEY NOT NULL,
+	Name VARCHAR(255) NOT NULL
+)
+
+GO
+
+create table CastMembers (
+	Id int PRIMARY KEY NOT NULL,
+	TvShow_Id int FOREIGN KEY REFERENCES TvShows (Id),
+	Name VARCHAR(255) NOT NULL,
+	Birthday DATETIME NULL
+)

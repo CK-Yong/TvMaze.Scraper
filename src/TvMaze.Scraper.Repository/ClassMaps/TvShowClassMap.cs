@@ -7,10 +7,11 @@ namespace TvMaze.Scraper.Repository.ClassMaps
 	{
 		public TvShowClassMap()
 		{
+			Table("TvShows");
 			Id(x => x.Id).GeneratedBy.Assigned();
 			Map(x => x.Name);
 			HasMany(x => x.Cast)
-				.KeyColumn("TvShowId")
+				.KeyColumn("TvShow_Id")
 				.Cascade.All();
 		}
 	}

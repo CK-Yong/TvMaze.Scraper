@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+	<LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\TvMaze.Scraper.Repository\TvMaze.Scraper.Repository.csproj" />
+    <ProjectReference Include="..\src\TvMaze.Scraper.Sources\TvMaze.Scraper.Sources.csproj" />
+    <ProjectReference Include="..\src\TvMaze.Scraper\TvMaze.Scraper.csproj" />
+  </ItemGroup>
+
+</Project>

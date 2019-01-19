@@ -6,6 +6,7 @@ namespace TvMaze.Scraper.Core
 	public struct ErrorCode
 	{
 		public static readonly ErrorCode NotFound = new ErrorCode(404);
+		public static readonly ErrorCode TooManyRequests = new ErrorCode(429);
 
 		public static readonly ErrorCode Empty = new ErrorCode(0);
 

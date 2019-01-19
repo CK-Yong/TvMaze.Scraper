@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TvMaze.Scraper.Core.Domain;
 
 namespace TvMaze.Scraper.Core
 {
@@ -22,5 +24,13 @@ namespace TvMaze.Scraper.Core
 		/// <param name="id">The identifier.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
 		Task<T> GetAsync(int id, CancellationToken cancellationToken);
+
+		/// <summary>
+		/// Gets multiple entities based on the specified indices asynchronously.
+		/// </summary>
+		/// <param name="startIndex">The start index.</param>
+		/// <param name="pageCount">The page count.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		Task<IList<TvShow>> GetMultipleAsync(int startIndex, int pageCount, CancellationToken cancellationToken);
 	}
 }
