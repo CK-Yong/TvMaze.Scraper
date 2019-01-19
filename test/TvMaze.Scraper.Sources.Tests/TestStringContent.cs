@@ -2,7 +2,7 @@ using System.Net.Http;
 
 internal static class TestStringContent
 {
-	public static StringContent TvShow = new StringContent(@"{
+	public static StringContent TvShow => new StringContent(@"{
 ""id"": 1,
 ""url"": ""http://www.tvmaze.com/shows/1/under-the-dome"",
 ""name"": ""Under the Dome"",
@@ -60,7 +60,7 @@ internal static class TestStringContent
 }
 }");
 
-	public static StringContent Cast = new StringContent(@"[
+	public static StringContent Cast => new StringContent(@"[
     {
         ""person"": {
             ""id"": 1,

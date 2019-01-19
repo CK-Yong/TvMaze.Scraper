@@ -49,7 +49,8 @@ namespace TvMaze.Scraper.Sources
 
 			if (!castResult.IsSuccessful)
 			{
-				return ScrapeResult<TvShow>.CreateError(castResult.ErrorMessage);
+				return ScrapeResult<TvShow>
+					.CreateError(castResult.ErrorMessage, castResult.ErrorCode);
 			}
 
 			var tvShow = tvShowResult.Data;

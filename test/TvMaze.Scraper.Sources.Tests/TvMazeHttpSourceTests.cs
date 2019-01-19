@@ -32,6 +32,13 @@ namespace TvMaze.Scraper.Sources.Tests
 			_source = _autoMock.Create<TvMazeHttpSource>();
 		}
 
+		private void SetupOkResponse(string uri, StringContent content)
+		{
+			_handler.SetupRequest(HttpMethod.Get, new Uri(_baseUri, uri))
+				.ReturnsResponse(HttpStatusCode.OK, content)
+				.Verifiable();
+		}
+
 		public class When_getting_a_show_by_id : TvMazeHttpSourceTests
 		{
 			private int _id = 123;
@@ -39,13 +46,8 @@ namespace TvMaze.Scraper.Sources.Tests
 			protected override void EstablishContext()
 			{
 				base.EstablishContext();
-				_handler.SetupRequest(HttpMethod.Get, new Uri(_baseUri, $"shows/{_id}"))
-					.ReturnsResponse(HttpStatusCode.OK, TestStringContent.TvShow)
-					.Verifiable();
-
-				_handler.SetupRequest(HttpMethod.Get, new Uri(_baseUri, $"shows/{_id}/cast"))
-					.ReturnsResponse(HttpStatusCode.OK, TestStringContent.Cast)
-					.Verifiable();
+				SetupOkResponse($"shows/{_id}", TestStringContent.TvShow);
+				SetupOkResponse($"shows/{_id}/cast", TestStringContent.Cast);
 			}
 
 			protected override async Task BecauseAsync()
@@ -77,49 +79,83 @@ namespace TvMaze.Scraper.Sources.Tests
 		{
 			private int _id = 123;
 
-			protected override void EstablishContext()
+			private void SetupNotFoundResponse(string uri)
 			{
-				base.EstablishContext();
-				var showUri = new Uri(_baseUri, $"shows/{_id}");
-				SetupNotFoundResponse(showUri);
-
-				var castUri = new Uri(_baseUri, $"shows/{_id}/cast");
-				SetupNotFoundResponse(castUri);
-			}
-
-			private void SetupNotFoundResponse(Uri castUri)
-			{
-				_handler.SetupRequest(HttpMethod.Get, castUri)
+				var resourceUri = new Uri(_baseUri, uri);
+				_handler.SetupRequest(HttpMethod.Get, resourceUri)
 					.ReturnsResponse(HttpStatusCode.NotFound, new StringContent(string.Empty),
 						response =>
 						{
 							response.RequestMessage = new HttpRequestMessage();
-							response.RequestMessage.RequestUri = castUri;
+							response.RequestMessage.RequestUri = resourceUri;
 						})
 					.Verifiable();
 			}
 
-			protected override async Task BecauseAsync()
+			public class When_the_tv_show_request_fails : When_the_request_fails
 			{
-				_result = await _source.GetByIdAsync(_id, CancellationToken.None);
+				protected override void EstablishContext()
+				{
+					base.EstablishContext();
+					SetupNotFoundResponse($"shows/{_id}");
+					SetupOkResponse($"shows/{_id}/cast", TestStringContent.Cast);
+				}
+
+				protected override async Task BecauseAsync()
+				{
+					_result = await _source.GetByIdAsync(_id, CancellationToken.None);
+				}
+
+				[Test]
+				public void It_should_return_an_unsuccessful_result()
+				{
+					_result.IsSuccessful.Should().BeFalse();
+				}
+
+				[Test]
+				public void It_should_contain_a_relevant_error_message()
+				{
+					_result.ErrorMessage.Should().Contain("the remote API returned 404 - NotFound");
+				}
+
+				[Test]
+				public void It_should_indicate_a_not_found_result()
+				{
+					_result.ErrorCode.Should().Be(ErrorCode.NotFound);
+				}
 			}
 
-			[Test]
-			public void It_should_return_an_unsuccessful_result()
+			public class When_the_cast_request_fails : When_the_request_fails
 			{
-				_result.IsSuccessful.Should().BeFalse();
-			}
+				protected override void EstablishContext()
+				{
+					base.EstablishContext();
+					SetupOkResponse($"shows/{_id}", TestStringContent.TvShow);
+					SetupNotFoundResponse($"shows/{_id}/cast");
+				}
 
-			[Test]
-			public void It_should_contain_a_relevant_error_message()
-			{
-				_result.ErrorMessage.Should().Contain("the remote API returned 404 - NotFound");
-			}
+				protected override async Task BecauseAsync()
+				{
+					_result = await _source.GetByIdAsync(_id, CancellationToken.None);
+				}
 
-			[Test]
-			public void It_should_indicate_a_not_found_result()
-			{
-				_result.ErrorCode.Should().Be(ErrorCode.NotFound);
+				[Test]
+				public void It_should_return_an_unsuccessful_result()
+				{
+					_result.IsSuccessful.Should().BeFalse();
+				}
+
+				[Test]
+				public void It_should_contain_a_relevant_error_message()
+				{
+					_result.ErrorMessage.Should().Contain("the remote API returned 404 - NotFound");
+				}
+
+				[Test]
+				public void It_should_indicate_a_not_found_result()
+				{
+					_result.ErrorCode.Should().Be(ErrorCode.NotFound);
+				}
 			}
 		}
 	}
