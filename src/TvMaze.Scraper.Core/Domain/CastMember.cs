@@ -1,6 +1,6 @@
 using System;
 
-namespace TvMaze.Scraper.Core
+namespace TvMaze.Scraper.Core.Domain
 {
 	public class CastMember 
 	{

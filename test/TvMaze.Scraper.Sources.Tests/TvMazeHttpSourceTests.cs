@@ -10,6 +10,7 @@ using MaxKagamine.Moq.HttpClient;
 using Moq;
 using NUnit.Framework;
 using TvMaze.Scraper.Core;
+using TvMaze.Scraper.Core.Domain;
 using TvMaze.Scraper.TestUtilities;
 
 namespace TvMaze.Scraper.Sources.Tests
@@ -118,7 +119,7 @@ namespace TvMaze.Scraper.Sources.Tests
 			[Test]
 			public void It_should_indicate_a_not_found_result()
 			{
-				_result.ErrorCode.Should().Be((int) HttpStatusCode.NotFound, "because the statuscode is 404.");
+				_result.ErrorCode.Should().Be(ErrorCode.NotFound);
 			}
 		}
 	}

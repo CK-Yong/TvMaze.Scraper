@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using TvMaze.Scraper.Core;
+using TvMaze.Scraper.Core.Domain;
 
 namespace TvMaze.Scraper
 {

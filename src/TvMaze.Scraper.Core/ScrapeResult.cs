@@ -18,7 +18,7 @@ namespace TvMaze.Scraper.Core
 		/// </summary>
 		public readonly string ErrorMessage;
 
-		public readonly int ErrorCode;
+		public readonly ErrorCode ErrorCode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ScrapeResult"/> class.
@@ -31,7 +31,6 @@ namespace TvMaze.Scraper.Core
 		/// Initializes a new instance of the <see cref="ScrapeResult{TData}"/> class.
 		/// </summary>
 		/// <param name="errorMessage">The error message.</param>
-		/// <param name="errorCode"></param>
 		protected ScrapeResult(string errorMessage)
 		{
 			ErrorMessage = errorMessage;
@@ -43,7 +42,7 @@ namespace TvMaze.Scraper.Core
 		/// </summary>
 		/// <param name="errorMessage">The error message.</param>
 		/// <param name="errorCode"></param>
-		protected ScrapeResult(string errorMessage, int errorCode)
+		protected ScrapeResult(string errorMessage, ErrorCode errorCode)
 			: this(errorMessage)
 		{
 			ErrorCode = errorCode;
@@ -83,7 +82,7 @@ namespace TvMaze.Scraper.Core
 		{
 		}
 
-		private ScrapeResult(string errorMessage, int errorCode)
+		private ScrapeResult(string errorMessage, ErrorCode errorCode)
 			: base(errorMessage, errorCode)
 		{
 			
@@ -128,7 +127,7 @@ namespace TvMaze.Scraper.Core
 		/// <returns>
 		/// An initialized <see cref="ScrapeResult{T}" /> that is faulted.
 		/// </returns>
-		public static ScrapeResult<TData> CreateError(string errorMessage, int errorCode)
+		public static ScrapeResult<TData> CreateError(string errorMessage, ErrorCode errorCode)
 		{
 			return new ScrapeResult<TData>(errorMessage, errorCode);
 		}

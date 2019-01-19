@@ -7,8 +7,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using TvMaze.Scraper.Core;
+using TvMaze.Scraper.Core.Domain;
 using TvMaze.Scraper.Sources.Extensions;
 
 namespace TvMaze.Scraper.Sources
@@ -74,7 +74,7 @@ namespace TvMaze.Scraper.Sources
 
 		private ScrapeResult<T> GenerateError<T>(Uri requestUri, HttpStatusCode statusCode)
 		{
-			return ScrapeResult<T>.CreateError($"Could not retrieve the resource at {requestUri}, the remote API returned {((int) statusCode)} - {statusCode}", (int) statusCode);
+			return ScrapeResult<T>.CreateError($"Could not retrieve the resource at {requestUri}, the remote API returned {((int) statusCode)} - {statusCode}", new ErrorCode((int)statusCode));
 		}
 
 		private async Task<T> DeserializeAsync<T>(HttpContent content)

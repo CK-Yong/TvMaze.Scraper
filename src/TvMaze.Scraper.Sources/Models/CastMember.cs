@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-namespace TvMaze.Scraper.Sources.Models
+﻿namespace TvMaze.Scraper.Sources.Models
 {
 	internal class CastMember
 	{

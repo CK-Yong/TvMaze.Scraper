@@ -1,8 +1,8 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NHibernate;
 using TvMaze.Scraper.Core;
+using TvMaze.Scraper.Core.Domain;
 
 namespace TvMaze.Scraper.Repository
 {

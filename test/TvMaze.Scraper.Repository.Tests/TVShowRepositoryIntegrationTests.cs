@@ -5,7 +5,7 @@ using AutoFixture;
 using FluentAssertions;
 using NHibernate;
 using NUnit.Framework;
-using TvMaze.Scraper.Core;
+using TvMaze.Scraper.Core.Domain;
 using TvMaze.Scraper.Repository.ClassMaps;
 using TvMaze.Scraper.Repository.Tests.NHibernate;
 using TvMaze.Scraper.TestUtilities;

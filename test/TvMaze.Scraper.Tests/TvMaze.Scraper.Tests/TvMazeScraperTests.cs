@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using TvMaze.Scraper.Core;
+using TvMaze.Scraper.Core.Domain;
 using TvMaze.Scraper.TestUtilities;
 
 namespace TvMaze.Scraper.Tests
