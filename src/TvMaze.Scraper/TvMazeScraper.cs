@@ -20,7 +20,8 @@ namespace TvMaze.Scraper
 		/// </summary>
 		public async Task<ScrapeResult<TvShow>> ScrapeAsync(int id, CancellationToken cancellationToken)
 		{
-			var scraped = await _showSource.GetByIdAsync(id, cancellationToken);
+			ScrapeResult<TvShow> scraped = await _showSource.GetByIdAsync(id, cancellationToken);
+
 			if (scraped.IsSuccessful)
 			{
 				await _showRepository.SaveAsync(scraped.Data, cancellationToken);

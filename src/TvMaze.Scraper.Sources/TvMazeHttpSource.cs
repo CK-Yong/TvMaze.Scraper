@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,8 +36,8 @@ namespace TvMaze.Scraper.Sources
 		/// <returns></returns>
 		public async Task<ScrapeResult<TvShow>> GetByIdAsync(int id, CancellationToken cancellationToken)
 		{
-			var getTvShow = GetTvShowAsync(id, cancellationToken);
-			var getCast = GetCastAsync(id, cancellationToken);
+			var getTvShow = GetAsync<TvShow>($"shows/{id}", cancellationToken);
+			var getCast = GetAsync<IEnumerable<Models.CastMember>>($"shows/{id}/cast", cancellationToken);
 			await Task.WhenAll(getTvShow, getCast);
 			var tvShowResult = await getTvShow;
 			var castResult = await getCast;
@@ -58,44 +59,22 @@ namespace TvMaze.Scraper.Sources
 			return new ScrapeResult<TvShow>(tvShow);
 		}
 
-		private async Task<ScrapeResult<TvShow>> GetTvShowAsync(int id, CancellationToken cancellationToken)
+		private async Task<ScrapeResult<T>> GetAsync<T>(string resource, CancellationToken cancellationToken)
 		{
-			var getTvShow = _httpClient.GetAsync($"shows/{id}", cancellationToken);
-
-			var tvShowResponse = await getTvShow;
-
-			if (tvShowResponse.StatusCode == HttpStatusCode.NotFound)
-			{
-				return HttpScrapeResult<TvShow>.CreateError(tvShowResponse.StatusCode, $"Could not get the show with ID {id}, the remote API returned {((int)tvShowResponse.StatusCode)} - {tvShowResponse.StatusCode}");
-			}
+			var tvShowResponse = await _httpClient.GetAsync(resource, cancellationToken);
 
 			if (!tvShowResponse.IsSuccessStatusCode)
 			{
-				return ScrapeResult<TvShow>
-					.CreateError($"Could not get the show with ID {id}, the remote API returned {((int)tvShowResponse.StatusCode)} - {tvShowResponse.StatusCode}");
+				return GenerateError<T>(tvShowResponse.RequestMessage.RequestUri, tvShowResponse.StatusCode);
 			}
 
-			var tvShow = await DeserializeAsync<TvShow>(tvShowResponse.Content);
-			return new ScrapeResult<TvShow>(tvShow);
+			var deserialized = await DeserializeAsync<T>(tvShowResponse.Content);
+			return new ScrapeResult<T>(deserialized);
 		}
 
-		private async Task<ScrapeResult<IEnumerable<Models.CastMember>>> GetCastAsync(int id, CancellationToken cancellationToken)
+		private ScrapeResult<T> GenerateError<T>(Uri requestUri, HttpStatusCode statusCode)
 		{
-			var castResponse = await _httpClient.GetAsync($"shows/{id}/cast", cancellationToken);
-
-			if (castResponse.StatusCode == HttpStatusCode.NotFound)
-			{
-				return HttpScrapeResult<IEnumerable<Models.CastMember>>.CreateError(castResponse.StatusCode, $"Could not get the cast for the show with ID {id}, the remote API returned {((int)castResponse.StatusCode)} - {castResponse.StatusCode}");
-			}
-
-			if (!castResponse.IsSuccessStatusCode)
-			{
-				return ScrapeResult<IEnumerable<Models.CastMember>>
-					.CreateError($"Could not get the cast for the show with ID {id}, the remote API returned  {((int)castResponse.StatusCode)} - {castResponse.StatusCode}");
-			}
-
-			var cast = await DeserializeAsync<IEnumerable<Models.CastMember>>(castResponse.Content);
-			return new ScrapeResult<IEnumerable<Models.CastMember>>(cast);
+			return ScrapeResult<T>.CreateError($"Could not retrieve the resource at {requestUri}, the remote API returned {((int) statusCode)} - {statusCode}", (int) statusCode);
 		}
 
 		private async Task<T> DeserializeAsync<T>(HttpContent content)

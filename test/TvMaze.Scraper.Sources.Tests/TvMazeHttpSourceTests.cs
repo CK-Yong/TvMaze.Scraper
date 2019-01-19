@@ -10,7 +10,6 @@ using MaxKagamine.Moq.HttpClient;
 using Moq;
 using NUnit.Framework;
 using TvMaze.Scraper.Core;
-using TvMaze.Scraper.Sources.Extensions;
 using TvMaze.Scraper.TestUtilities;
 
 namespace TvMaze.Scraper.Sources.Tests
@@ -80,12 +79,22 @@ namespace TvMaze.Scraper.Sources.Tests
 			protected override void EstablishContext()
 			{
 				base.EstablishContext();
-				_handler.SetupRequest(HttpMethod.Get, new Uri(_baseUri, $"shows/{_id}"))
-					.ReturnsResponse(HttpStatusCode.NotFound, new StringContent(string.Empty))
-					.Verifiable();
+				var showUri = new Uri(_baseUri, $"shows/{_id}");
+				SetupNotFoundResponse(showUri);
 
-				_handler.SetupRequest(HttpMethod.Get, new Uri(_baseUri, $"shows/{_id}/cast"))
-					.ReturnsResponse(HttpStatusCode.NotFound, new StringContent(string.Empty))
+				var castUri = new Uri(_baseUri, $"shows/{_id}/cast");
+				SetupNotFoundResponse(castUri);
+			}
+
+			private void SetupNotFoundResponse(Uri castUri)
+			{
+				_handler.SetupRequest(HttpMethod.Get, castUri)
+					.ReturnsResponse(HttpStatusCode.NotFound, new StringContent(string.Empty),
+						response =>
+						{
+							response.RequestMessage = new HttpRequestMessage();
+							response.RequestMessage.RequestUri = castUri;
+						})
 					.Verifiable();
 			}
 
@@ -109,7 +118,7 @@ namespace TvMaze.Scraper.Sources.Tests
 			[Test]
 			public void It_should_indicate_a_not_found_result()
 			{
-				_result.IndicatesNotFound().Should().BeTrue("because the statuscode was notfound.");
+				_result.ErrorCode.Should().Be((int) HttpStatusCode.NotFound, "because the statuscode is 404.");
 			}
 		}
 	}

@@ -16,7 +16,9 @@ namespace TvMaze.Scraper.Core
 		/// <summary>
 		/// Used to communicate an error message.
 		/// </summary>
-		public string ErrorMessage;
+		public readonly string ErrorMessage;
+
+		public readonly int ErrorCode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ScrapeResult"/> class.
@@ -29,10 +31,22 @@ namespace TvMaze.Scraper.Core
 		/// Initializes a new instance of the <see cref="ScrapeResult{TData}"/> class.
 		/// </summary>
 		/// <param name="errorMessage">The error message.</param>
+		/// <param name="errorCode"></param>
 		protected ScrapeResult(string errorMessage)
 		{
 			ErrorMessage = errorMessage;
 			IsSuccessful = false;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScrapeResult{TData}"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
+		/// <param name="errorCode"></param>
+		protected ScrapeResult(string errorMessage, int errorCode)
+			: this(errorMessage)
+		{
+			ErrorCode = errorCode;
 		}
 	}
 
@@ -69,6 +83,12 @@ namespace TvMaze.Scraper.Core
 		{
 		}
 
+		private ScrapeResult(string errorMessage, int errorCode)
+			: base(errorMessage, errorCode)
+		{
+			
+		}
+
 		/// <summary>
 		/// Gets the data associated with this <see cref="ScrapeResult{TData}"/>.
 		/// </summary>
@@ -98,6 +118,19 @@ namespace TvMaze.Scraper.Core
 		public static ScrapeResult<TData> CreateError(string errorMessage)
 		{
 			return new ScrapeResult<TData>(errorMessage);
+		}
+
+		/// <summary>
+		/// Creates a faulted <see cref="ScrapeResult{T}" /> that throws a <see cref="ScrapeDataNotAccessibleException" /> with the given <param name="errorMessage">error message</param> when the data is accessed.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
+		/// <param name="errorCode">The error code.</param>
+		/// <returns>
+		/// An initialized <see cref="ScrapeResult{T}" /> that is faulted.
+		/// </returns>
+		public static ScrapeResult<TData> CreateError(string errorMessage, int errorCode)
+		{
+			return new ScrapeResult<TData>(errorMessage, errorCode);
 		}
 	}
 }
