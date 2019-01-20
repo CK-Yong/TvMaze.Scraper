@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -10,6 +11,7 @@ using TvMaze.Scraper.Sources.Modules;
 
 namespace TvMaze.Scraper.Console
 {
+	[ExcludeFromCodeCoverage]
 	public class Program
 	{
 		private static int _currentIndex = 1;

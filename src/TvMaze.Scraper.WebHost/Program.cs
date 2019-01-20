@@ -1,8 +1,10 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System.Diagnostics.CodeAnalysis;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 
 namespace TvMaze.Scraper.WebHost
 {
+	[ExcludeFromCodeCoverage]
 	public class Program
 	{
 		public static void Main(string[] args)

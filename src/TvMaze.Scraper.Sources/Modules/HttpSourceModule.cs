@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using Autofac;
 using TvMaze.Scraper.Core;
@@ -10,6 +11,7 @@ namespace TvMaze.Scraper.Sources.Modules
 	/// Registers the HTTP implementation of <see cref="ISource{T}"/>.
 	/// </summary>
 	/// <seealso cref="Autofac.Module" />
+	[ExcludeFromCodeCoverage]
 	public class HttpSourceModule : Module
 	{
 		private HttpClient _httpClient = new HttpClient();

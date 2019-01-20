@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Diagnostics.CodeAnalysis;
+using Autofac;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
@@ -12,6 +13,7 @@ namespace TvMaze.Scraper.Repository.Modules
 	/// Module for registering the data access layer. Uses local SQLExpress by default.
 	/// </summary>
 	/// <seealso cref="Autofac.Module" />
+	[ExcludeFromCodeCoverage]
 	public class MsSqlRepositoryModule : Module
 	{
 		private string _connectionString = "Server=localhost\\SQLEXPRESS;Database=TvMazeScraper;Trusted_Connection=True;";

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Diagnostics.CodeAnalysis;
+using Autofac;
 
 namespace TvMaze.Scraper
 {
@@ -6,6 +7,7 @@ namespace TvMaze.Scraper
 	/// Registers the <see cref="TvMazeScraper"/>.
 	/// </summary>
 	/// <seealso cref="Autofac.Module" />
+	[ExcludeFromCodeCoverage]
 	public class TvMazeScraperModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)

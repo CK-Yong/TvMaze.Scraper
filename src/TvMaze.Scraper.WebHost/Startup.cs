@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Diagnostics.CodeAnalysis;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using TvMaze.Scraper.Repository.Modules;
 
 namespace TvMaze.Scraper.WebHost
 {
+	[ExcludeFromCodeCoverage]
 	public class Startup
 	{
 		public Startup(IConfiguration configuration)
