@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NHibernate;
@@ -38,14 +39,25 @@ namespace TvMaze.Scraper.Repository
 			}
 		}
 
-		public Task<IList<TvShow>> GetMultipleAsync(int startIndex, int pageCount, CancellationToken cancellationToken)
+		public async Task<IList<TvShow>> GetMultipleAsync(int elementsToSkip, int pageCount, CancellationToken cancellationToken)
+		{
+			using (var session = _sessionFactory.OpenSession())
+			{
+				var shows = await session.QueryOver<TvShow>()
+					.Skip(elementsToSkip)
+					.Take(pageCount)
+					.ListAsync(cancellationToken);
+
+				return shows;
+			}
+		}
+
+		public Task<int> GetTotalItemsAsync(CancellationToken cancellationToken)
 		{
 			using (var session = _sessionFactory.OpenSession())
 			{
 				return session.QueryOver<TvShow>()
-					.Skip(startIndex - 1)
-					.Take(pageCount)
-					.ListAsync(cancellationToken);
+					.RowCountAsync(cancellationToken);
 			}
 		}
 

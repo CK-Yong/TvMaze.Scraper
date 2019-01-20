@@ -11,6 +11,7 @@ namespace TvMaze.Scraper.Repository.ClassMaps
 			Id(x => x.Id).GeneratedBy.Assigned();
 			Map(x => x.Name);
 			HasMany(x => x.Cast)
+				.Not.LazyLoad()
 				.KeyColumn("TvShow_Id")
 				.Cascade.All();
 		}

@@ -2,6 +2,7 @@
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
+using NHibernate.Driver;
 using TvMaze.Scraper.Core;
 using TvMaze.Scraper.Core.Domain;
 
@@ -29,8 +30,9 @@ namespace TvMaze.Scraper.Repository.Modules
 		{
 			var sessionFactory = Fluently.Configure()
 				.Database(MsSqlConfiguration.MsSql2012
-					.ConnectionString(_connectionString))
-				.Mappings(m=>m.FluentMappings.AddFromAssembly(ThisAssembly))
+					.ConnectionString(_connectionString)
+					.Driver<SqlClientDriver>())
+				.Mappings(m => m.FluentMappings.AddFromAssembly(ThisAssembly))
 				.BuildSessionFactory();
 
 			builder.RegisterInstance(sessionFactory)

@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\TvMaze.Scraper.Repository\TvMaze.Scraper.Repository.csproj" />
-    <ProjectReference Include="..\src\TvMaze.Scraper.Sources\TvMaze.Scraper.Sources.csproj" />
-    <ProjectReference Include="..\src\TvMaze.Scraper\TvMaze.Scraper.csproj" />
+    <ProjectReference Include="..\TvMaze.Scraper.Repository\TvMaze.Scraper.Repository.csproj" />
+    <ProjectReference Include="..\TvMaze.Scraper.Sources\TvMaze.Scraper.Sources.csproj" />
+    <ProjectReference Include="..\TvMaze.Scraper\TvMaze.Scraper.csproj" />
   </ItemGroup>
 
 </Project>

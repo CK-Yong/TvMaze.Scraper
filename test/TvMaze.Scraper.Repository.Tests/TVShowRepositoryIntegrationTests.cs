@@ -151,7 +151,29 @@ namespace TvMaze.Scraper.Repository.Tests
 			[Test]
 			public void It_should_start_at_the_entity_with_the_id_of_the_start_index()
 			{
-				_result.First().Id.Should().Be(5, "because the startindex is 5.");
+				_result.First().Id.Should().Be(6, "because the first 5 elements were skipped and the first ID starts at 1.");
+			}
+		}
+
+		public class When_getting_the_total_number_of_items : TvShowRepositoryIntegrationTests
+		{
+			private int _result;
+
+			protected override void EstablishContext()
+			{
+				base.EstablishContext();
+				GenerateAndSaveShows(50);
+			}
+
+			protected override async Task BecauseAsync()
+			{
+				_result = await _repository.GetTotalItemsAsync(CancellationToken.None);
+			}
+
+			[Test]
+			public void It_should_return_the_total_number_of_items_within_the_database()
+			{
+				_result.Should().Be(50);
 			}
 		}
 	}
